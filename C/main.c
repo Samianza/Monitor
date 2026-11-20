@@ -55,7 +55,15 @@ void VKParaString(int vk, char *buffer) {
     }
 }
 
+// essa função adiciona as teclas monitoradas no vetor de structs
+void AdicionarTecla(int vk) {
+    // condição para evitar o estouro do limite do vetor teclas
+    if (total_teclas >= MAX_TECLAS) return;
+    teclas[total_teclas].vk = vk; // registra o codigo vk
+    teclas[total_teclas].estava_pressionada = 0; // marca como não pressionada
+    total_teclas++; // contador para atender limite de 90 teclas
 
-void AdicionarTecla(int vk)
+}
+
 void InicializarTeclas()
 void VerificarTeclas(FILE *arquivo)
