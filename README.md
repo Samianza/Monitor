@@ -27,4 +27,5 @@ As limitações técnicas, restrições conhecidas e questões ainda não resolv
 Novas anotações técnicas, decisões de arquitetura e resultados de análise serão adicionados conforme o desenvolvimento evoluir.
 
 Graça a vós e paz, da parte de Deus, nosso Pai, e do Senhor Jesus Cristo.
+
 Fim do registro.
