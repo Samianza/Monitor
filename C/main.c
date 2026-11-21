@@ -88,7 +88,7 @@ void VerificarTeclas(FILE *arquivo) {
 
     for(int i = 0; i < total_teclas; i++) {
         int vk = teclas[i].vk;
-        int esta_pressionada = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0;
+        int esta_pressionada = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0; // verifica se a tecla está pressionada
 
         if (esta_pressionada && !teclas[i].estava_pressionada) {
             VKParaString(vk, nome_tecla);
@@ -111,6 +111,6 @@ int main() {
 
     while(1) {
         VerificarTeclas(arquivo);
-        Sleep(10);
+        Sleep(10); // evita que o programa consuma 100% da CPU
     }
 }
