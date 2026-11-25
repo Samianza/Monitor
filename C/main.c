@@ -16,6 +16,14 @@ EstadoTecla teclas[MAX_TECLAS]; // vetor para armazenar todas as teclas monitora
 int total_teclas = 0; // variavel usada na função AdicionarTecla
 
 
+void ObterHorario(char *buffer) {
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d",
+            st.wDay, st.wMonth, st.wYear,
+            st.wHour, st.wMinute, st.wSecond);
+}
+
 // essa função torna humanamente legível o código vk das teclas
 void VKParaString(int vk, char *buffer) {
     switch (vk) {
