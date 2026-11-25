@@ -86,8 +86,8 @@ void AdicionarTecla(int vk, int eh_mouse) {
     if (total_teclas >= MAX_TECLAS) return;
     teclas[total_teclas].vk = vk; // registra o codigo vk
     teclas[total_teclas].estava_pressionada = 0; // marca como não pressionada
-    teclas[total_teclas].tempo_pressionou = 0;
-    teclas[total_teclas].horario_pressionou[0] = '\0';
+    teclas[total_teclas].tempo_pressionou = 0; // registra o tempo que a tecla foi pressionada
+    teclas[total_teclas].horario_pressionou[0] = '\0'; // inicializa o horário que a tecla foi pressionada
     teclas[total_teclas].eh_mouse = eh_mouse; // marca se é uma tecla de mouse ou não
     total_teclas++; // contador para atender limite de 90 teclas
 
@@ -108,6 +108,16 @@ void InicializarTeclas() {
     AdicionarTecla(VK_RIGHT, 0); AdicionarTecla(VK_DOWN, 0);
 
     for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i, 0);
+
+    AdicionarTecla(VK_OEM_COMMA,  0); AdicionarTecla(VK_OEM_PERIOD, 0);
+    AdicionarTecla(VK_OEM_2,      0); AdicionarTecla(VK_OEM_5,      0);
+    AdicionarTecla(VK_OEM_4,      0); AdicionarTecla(VK_OEM_6,      0);
+    AdicionarTecla(VK_OEM_1,      0); AdicionarTecla(VK_OEM_7,      0);
+    AdicionarTecla(VK_OEM_MINUS,  0); AdicionarTecla(VK_OEM_PLUS,   0);
+
+    AdicionarTecla(VK_LBUTTON, 1);
+    AdicionarTecla(VK_RBUTTON, 1);
+    AdicionarTecla(VK_MBUTTON, 1);
 }
 
 void LimparEstadoTeclas() {
@@ -137,7 +147,7 @@ void VerificarTeclas(FILE *arquivo) {
 
         if (esta_pressionada && !teclas[i].estava_pressionada) {
             teclas[i].tempo_pressionou = GetTickCount(); // registra o tempo que a tecla foi pressionada
-            ObterHorario(teclas[i].horario_pressionou); // registra o horário que
+            ObterHorario(teclas[i].horario_pressionou); // registra o horário que a tecla foi pressionada
             teclas[i].estava_pressionada = 1; // marca como pressionada
             ObterPosicaoMouse(&x_in, &y_in); // registra a posição do mouse quando a tecla foi pressionada
             
