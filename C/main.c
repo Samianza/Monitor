@@ -101,6 +101,13 @@ void LimparEstadoTeclas() {
     }
 }
 
+void ObterPosicaoMouse(int *x, int *y) {
+    POINT pt;
+    GetCursorPos(&pt);
+    *x = pt.x;
+    *y = pt.y;
+}
+
 // função com a lógica principal do funcionamento do monitor
 void VerificarTeclas(FILE *arquivo) {
     char nome_tecla[10];
