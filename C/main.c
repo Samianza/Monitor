@@ -94,6 +94,13 @@ void InicializarTeclas() {
     for (int i = 0; i < 12; i++) AdicionarTecla(VK_F1 + i);
 }
 
+void LimparEstadoTeclas() {
+    for (int i = 0; i < total_teclas; i++) {
+        GetAsyncKeyState(teclas[i].vk); // limpa o estado da tecla
+        teclas[i].estava_pressionada = 0; // marca como não pressionada
+    }
+}
+
 // função com a lógica principal do funcionamento do monitor
 void VerificarTeclas(FILE *arquivo) {
     char nome_tecla[10];
