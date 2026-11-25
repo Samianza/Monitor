@@ -2,10 +2,14 @@
 #include <windows.h> //para usar a api do windows
 
 #define MAX_TECLAS 90 // o total de teclas que seram monitoradas
+#define TEMPO_CLIQUE_MS 300 // tempo em milisegundos para diferenciar clique de pressionamento
 
 typedef struct {
     int vk;
     int estava_pressionada;
+    DWORD tempo_pressionou;
+    char horario_pressionou[30];
+    int eh_mouse;
 } EstadoTecla;
 
 EstadoTecla teclas[MAX_TECLAS]; // vetor para armazenar todas as teclas monitoradas
