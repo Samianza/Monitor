@@ -111,18 +111,58 @@ void ObterPosicaoMouse(int *x, int *y) {
 // função com a lógica principal do funcionamento do monitor
 void VerificarTeclas(FILE *arquivo) {
     char nome_tecla[10];
+    char horario_atual[30];
+    char linha[100];
+    int x_in, y_in, x_out, y_out;
 
     for(int i = 0; i < total_teclas; i++) {
         int vk = teclas[i].vk;
         int esta_pressionada = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0; // verifica se a tecla está pressionada
 
         if (esta_pressionada && !teclas[i].estava_pressionada) {
-            VKParaString(vk, nome_tecla);
-            fprintf(arquivo, "%s\n", nome_tecla);
-            fflush(arquivo);
-            teclas[i].estava_pressionada = 1;
+            teclas[i].tempo_pressionou = GetTickCount(); // registra o tempo que a tecla foi pressionada
+            ObterHorario(teclas[i].horario_pressionou); // registra o horário que
+            teclas[i].estava_pressionada = 1; // marca como pressionada
+            ObterPosicaoMouse(&x_in, &y_in); // registra a posição do mouse quando a tecla foi pressionada
+            
         }
-        if (!esta_pressionada && teclas[i].estava_pressionada) teclas[i].estava_pressionada = 0;
+        if (!esta_pressionada && teclas[i].estava_pressionada) {
+            DWORD tempo_soltou = GetTickCount(); // registra o tempo que a tecla foi solta
+            DWORD duracao = tempo_soltou - teclas[i].tempo_pressionou; // calcula a duração que a tecla ficou pressionada
+
+            VKParaString(vk, nome_tecla); // converte o código vk para string
+            ObterHorario(horario_atual); // registra o horário atual
+            ObterPosicaoMouse(&x_out, &y_out); // registra a posição do mouse quando a tecla foi solta
+
+            if (duracao < TEMPO_CLIQUE_MS) {
+                if (teclas[i].eh_mouse)
+                    sprintf(linha, "[%s] CLIQUE %s em (%d, %d)\n",
+                            horario_atual, nome_tecla, x_in, y_in);
+                else
+                    sprintf(linha, "[%s] CLIQUE: %s\n", horario_atual, nome_tecla);
+
+                fputs(linha, arquivo);
+            } else {
+                if (teclas[i].eh_mouse) {
+                    sprintf(linha, "[%s] PRESSIONOU %s em (%d, %d)\n",
+                            teclas[i].horario_pressionou, nome_tecla, x_in, y_in);
+                    fputs(linha, arquivo);
+
+                    sprintf(linha, "[%s] SOLTOU %s em (%d, %d)\n",
+                            horario_atual, nome_tecla, x_out, y_out);
+                    fputs(linha, arquivo);
+                } else {
+                    sprintf(linha, "[%s] PRESSIONOU: %s\n",
+                            teclas[i].horario_pressionou, nome_tecla);
+                    fputs(linha, arquivo);
+
+                    sprintf(linha, "[%s] SOLTOU: %s\n", horario_atual, nome_tecla);
+                    fputs(linha, arquivo);
+                }
+            }
+            fflush(arquivo); // garante que os dados sejam gravados no arquivo
+            teclas[i].estava_pressionada = 0; // marca como não pressionada
+        }
     }
 }
 
